@@ -9,6 +9,8 @@ public class GestionTicket {
         cantidadTickets = 0;
         colaTickets = new TicketAbierto();
         historialTickets = new TicketCompleto();
+
+        System.out.println("Sistema de gestión de tickets iniciado.");
     }
 
     public class Ticket {
@@ -104,6 +106,8 @@ public class GestionTicket {
     public void crearTicket(String descripcion, String nombreCompleto, String usuarioCrea, String fechaCreacion) {
         Ticket nuevoTicket = new Ticket(descripcion, nombreCompleto, usuarioCrea, fechaCreacion);
         colaTickets.insertarTicket(nuevoTicket);
+
+        System.out.println("Se ha creado un ticket nuevo número: " + nuevoTicket.getIdTicket());
     }
 
     public void completarTicket(Ticket ticket, String fechaResolucion) {
@@ -111,6 +115,8 @@ public class GestionTicket {
         ticket.setFechaResolucion(fechaResolucion);
         colaTickets.eliminarTicket(); // Suponiendo que siempre sea el primer ticket FIFO
         historialTickets.agregarTicketInicio(ticket);
+
+        System.out.println("Se ha completado el ticket número: " + ticket.getIdTicket());
     }
 
     public class TicketAbierto {
@@ -142,6 +148,20 @@ public class GestionTicket {
             return colaTickets.get(0);
         }
 
+        public String imprimirTickets() {
+            if (!hayTicketsAbiertos()) {
+                return "No hay tickets disponibles";
+            }
+
+            String tickets = "";
+
+            for (int i = 0; i < colaTickets.size(); i++) {
+                tickets += colaTickets.get(i).toString();
+            }
+
+            return tickets;
+        }
+
     }
 
     public class TicketCompleto {
@@ -166,6 +186,8 @@ public class GestionTicket {
         public void agregarTicketInicio(Ticket ticket) {
             ticket.setSiguienteTicket(getPrimerTicket());
             setPrimerTicket(ticket);
+
+            System.out.println("Se completo y se ha agregado un ticket al inicio");
         }
 
         public void agregarTicketFinal(Ticket ticket) {
@@ -182,10 +204,12 @@ public class GestionTicket {
 
             temporal.setSiguienteTicket(ticket);
 
+            System.out.println("Se completo y se ha agregado un ticket al final");
         }
 
         public Ticket buscarTicket(int id) {
             if (!hayTicketsCompletos()) {
+                System.out.println("No hay tickets completos para buscar");
                 return null;
             }
 
@@ -199,11 +223,13 @@ public class GestionTicket {
                 temporal = temporal.getSiguienteTicket();
             }
 
+            System.out.println("No se encontro el ticket número: " + id);
             return null;
         }
 
         public Ticket eliminarTicket(int id) {
             if (!hayTicketsCompletos()) {
+                System.out.println("No hay tickets completos para eliminar");
                 return null;
             }
 
@@ -220,18 +246,24 @@ public class GestionTicket {
 
             if (actual == null) {
                 // No se encontro nada
+                System.out.println("No se encontro el ticket número: " + id);
+                return null;
             } else if (anterior == actual) {
                 setPrimerTicket(actual.getSiguienteTicket());
             } else {
                 anterior.setSiguienteTicket(actual.getSiguienteTicket());
             }
 
+            System.out.println("Se ha eliminado el ticket número: " + id + " del historial de tickets completos");
             return actual;
         }
 
         public String imprimirTickets() {
             if (!hayTicketsCompletos()) {
-                return "No hay tickets completos";
+                // Hay que cambiarlo por una impresión en consola y un retorno por null, como se
+                // venia haciendo con los anteriores
+                System.out.println("No hay tickets completos");
+                return null;
             }
 
             String tickets = "";
