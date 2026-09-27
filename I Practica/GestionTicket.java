@@ -96,9 +96,9 @@ public class GestionTicket {
         @Override
         public String toString() {
 
-            return "ID: " + idTicket + "\nNombre completo: " + nombreCompleto + "\nDescripción: " + descripcion
-                    + "\nFecha de creación: " + fechaCreacion + "\nFecha de resolución: " + fechaResolucion
-                    + "\nEstado: " + estado + "\n";
+            return "ID: " + idTicket + "\nNombre completo: " + nombreCompleto + "\nUsuario crea: "
+                    + usuarioCrea + "\nDescripción: " + descripcion + "\nFecha de creación: " + fechaCreacion
+                    + "\nFecha de resolución: " + fechaResolucion + "\nEstado: " + estado + "\n";
         }
 
     }
@@ -111,6 +111,10 @@ public class GestionTicket {
     }
 
     public void completarTicket(Ticket ticket, String fechaResolucion) {
+        if (!colaTickets.hayTicketsAbiertos()) {
+            System.out.println("No hay tickets disponibles para completar");
+            return;
+        }
         ticket.setEstado("Completado");
         ticket.setFechaResolucion(fechaResolucion);
         colaTickets.eliminarTicket(); // Suponiendo que siempre sea el primer ticket FIFO
