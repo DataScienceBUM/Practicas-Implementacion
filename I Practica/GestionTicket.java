@@ -217,6 +217,7 @@ public class GestionTicket {
 
             while (temporal != null) {
                 if (id == temporal.getIdTicket()) {
+                    System.out.println(temporal.toString());
                     return temporal;
                 }
 
