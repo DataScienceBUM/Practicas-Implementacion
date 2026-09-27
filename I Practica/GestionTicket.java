@@ -272,7 +272,10 @@ public class GestionTicket {
             while (temporal != null) {
 
                 tickets += temporal.toString();
-                temporal.getSiguienteTicket();
+                // linea que causaba el bucle infinito
+                // temporal.getSiguienteTicket();
+
+                temporal = temporal.getSiguienteTicket();
             }
 
             return tickets;

@@ -20,11 +20,6 @@ public class Main {
         System.out.println(sistema.getColaTickets().imprimirTickets());
 
         System.out.println("Tickets completados");
-        System.out.println(sistema.getHistorialTickets().imprimirTickets()); // hay un problema en el recorrido ya que
-                                                                             // se queda en un bucle, revisar la función
-                                                                             // de insentar al inicio que es la que se
-                                                                             // usa para añadirlo al historial o revisar
-                                                                             // la función de imprimirTickets de
-                                                                             // HistorialTickets
+        System.out.println(sistema.getHistorialTickets().imprimirTickets());
     }
 }
