@@ -1,11 +1,17 @@
+import java.util.ArrayList;
+
 public class GestionTicket {
     private int cantidadTickets;
+    private TicketAbierto colaTickets; // Donde ingresan los nuevos tickets
+    private TicketCompleto historialTickets; // Donde van los tickets completados
 
     public GestionTicket() {
         cantidadTickets = 0;
+        colaTickets = new TicketAbierto();
+        historialTickets = new TicketCompleto();
     }
 
-    private class Ticket {
+    public class Ticket {
         private String descripcion, nombreCompleto, usuarioCrea, fechaCreacion, fechaResolucion, estado;
         private int idTicket;
         private Ticket siguienteTicket;
@@ -95,7 +101,50 @@ public class GestionTicket {
 
     }
 
-    private class TicketCompleto {
+    public void crearTicket(String descripcion, String nombreCompleto, String usuarioCrea, String fechaCreacion) {
+        Ticket nuevoTicket = new Ticket(descripcion, nombreCompleto, usuarioCrea, fechaCreacion);
+        colaTickets.insertarTicket(nuevoTicket);
+    }
+
+    public void completarTicket(Ticket ticket, String fechaResolucion) {
+        ticket.setEstado("Completado");
+        ticket.setFechaResolucion(fechaResolucion);
+        colaTickets.eliminarTicket(); // Suponiendo que siempre sea el primer ticket FIFO
+        historialTickets.agregarTicketInicio(ticket);
+    }
+
+    public class TicketAbierto {
+        private ArrayList<Ticket> colaTickets;
+
+        public TicketAbierto() {
+            colaTickets = new ArrayList<>();
+        }
+
+        public boolean hayTicketsAbiertos() {
+            return !colaTickets.isEmpty();
+        }
+
+        public void insertarTicket(Ticket ticket) {
+            colaTickets.add(ticket);
+        }
+
+        public Ticket eliminarTicket() {
+            if (!hayTicketsAbiertos()) {
+                return null;
+            }
+            return colaTickets.remove(0);
+        }
+
+        public Ticket verSiguienteTicket() {
+            if (!hayTicketsAbiertos()) {
+                return null;
+            }
+            return colaTickets.get(0);
+        }
+
+    }
+
+    public class TicketCompleto {
         private Ticket primerTicket;
 
         public TicketCompleto() {
@@ -198,4 +247,19 @@ public class GestionTicket {
         }
     }
 
+    public void setColaTickets(TicketAbierto colaTickets) {
+        this.colaTickets = colaTickets;
+    }
+
+    public void setHistorialTickets(TicketCompleto historialTickets) {
+        this.historialTickets = historialTickets;
+    }
+
+    public TicketAbierto getColaTickets() {
+        return colaTickets;
+    }
+
+    public TicketCompleto getHistorialTickets() {
+        return historialTickets;
+    }
 }
